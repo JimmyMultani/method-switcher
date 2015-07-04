@@ -20,6 +20,16 @@ main {
 	@include clearfix;
 }
 
+.accordion--desktop {
+	h3 {
+		line-height: 2.5;
+		margin: 0;
+	}
+	p {
+		&:first-child { margin-top: 0; }
+		&:last-child { margin-bottom: 0; }
+	}
+}
 
 /* =======================================================================
 Header

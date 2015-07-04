@@ -163,6 +163,7 @@ gulp.task('sass', function() {
 // JS
 gulp.task('scripts', function() {
 	return gulp.src([
+		options.paths.js + 'libs/jquery.js',
 		options.paths.js + 'libs/*.js',
 		options.paths.js + 'helpers.js',
 		options.paths.js + 'app.js',
