@@ -77,7 +77,7 @@
 			init: function(media) {
 				console.log('accordion.init');
 
-				if (typeof media === undefined) { media = 'desktop'; }
+				if (typeof media === 'undefined') { media = 'desktop'; }
 
 				this.create(media);
 				this.addListeners();
@@ -119,6 +119,8 @@
 	})();
 
 	MYAPP.tabs = (function() {
+		var $tabs = $('.tabs');
+
 		return {
 			init: function() {
 				console.log('tabs.init');
@@ -130,13 +132,22 @@
 				this.updateTabs();
 			},
 			create: function() {
-				$('.tabs').tabs();
+				$tabs.tabs();
 			},
 			destroy: function() {
-				$('.tabs').tabs('destroy');
+				$tabs.tabs('destroy');
 			},
 			addListeners: function() {
 				$(window).on('resize', this.updateTabs);
+				$tabs.on('tabsactivate', this.switchTabs);
+			},
+			switchTabs: function(event, ui) {
+				var nextEl = ui.newPanel;
+
+				if($(nextEl[0]).find('.slick-slider').length) {
+					var slider = $(nextEl[0]).find('.slick-slider');
+					MYAPP.slider.refresh(slider);
+				}
 			},
 			updateTabs: MYAPP.helper.debounce(function() {
 				windowWidth = window.innerWidth;
@@ -156,15 +167,19 @@
 		};
 	})();
 
-	MYAPP.slider = (function() {
+	MYAPP.slider = (function(element) {
 		return {
 			init: function() {
 				console.log('slider.init');
 
-				this.create();
+				this.create(element);
 			},
-			create: function() {
-				$('.slider').slick({
+			create: function(element) {
+				console.log('slider.create');
+
+				if (typeof element === 'undefined') { element = '.slider'; }
+
+				$(element).slick({
 					slidesToShow: 3,
   					slidesToScroll: 3,
 					responsive: [
@@ -179,8 +194,16 @@
 					]
 				});
 			},
-			destroy: function() {
-				$('.slider').unslick();
+			destroy: function(element) {
+				console.log('slider.destroy');
+
+				if (typeof element === 'undefined') { element = '.slider'; }
+
+				$(element).slick('unslick');
+			},
+			refresh: function(element) {
+				this.destroy(element);
+				this.create(element);
 			}
 		};
 	})();
